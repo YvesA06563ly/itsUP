@@ -55,7 +55,8 @@ services:
       - TZ=${TZ:-UTC}
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_INCLUDE_RESTARTING=true
-      - WATCHTOWER_SCHEDULE=${WATCHTOWER_SCHEDULE:-0 0 4 * * *}
+      # Changed schedule to run at 2am instead of 4am to avoid overlap with backups
+      - WATCHTOWER_SCHEDULE=${WATCHTOWER_SCHEDULE:-0 0 2 * * *}
       - WATCHTOWER_NOTIFICATIONS=${WATCHTOWER_NOTIFICATIONS:-}
       - WATCHTOWER_NOTIFICATION_URL=${WATCHTOWER_NOTIFICATION_URL:-}
     networks:
