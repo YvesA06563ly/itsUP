@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  proxy:
+    image: traefik:v3.0
+    container_name: itsup-proxy
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+      - '8080:8080'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./config/traefik:/etc/traefik
+      - traefik-certs:/certs
+    environment:
+      - TZ=${TZ:-UTC}
+    networks:
+      - proxy
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.dashboard.rule=Host(`traefik.${DOMAIN}`)'
+      - 'traefik.http.routers.dashboard.entrypoints=websecure'
+      - 'traefik.http.routers.dashboard.tls=true'
+      - 'traefik.http.routers.dashboard.tls.certresolver=letsencrypt'
+      - 'traefik.http.routers.dashboard.service=api@internal'
+      - 'traefik.http.routers.dashboard.middlewares=auth'
+      - 'traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_AUTH}'
+
+  monitor:
+    image: louislam/uptime-kuma:1
+    container_name: itsup-monitor
+    restart: unless-stopped
+    volumes:
+      - uptime-kuma-data:/app/data
+    environment:
+      - TZ=${TZ:-UTC}
+    networks:
+      - proxy
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.monitor.rule=Host(`monitor.${DOMAIN}`)'
+      - 'traefik.http.routers.monitor.entrypoints=websecure'
+      - 'traefik.http.routers.monitor.tls=true'
+      - 'traefik.http.routers.monitor.tls.certresolver=letsencrypt'
+      - 'traefik.http.services.monitor.loadbalancer.server.port=3001'
+
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: itsup-watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - TZ=${TZ:-UTC}
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_INCLUDE_RESTARTING=true
+      - WATCHTOWER_SCHEDULE=${WATCHTOWER_SCHEDULE:-0 0 4 * * *}
+      - WATCHTOWER_NOTIFICATIONS=${WATCHTOWER_NOTIFICATIONS:-}
+      - WATCHTOWER_NOTIFICATION_URL=${WATCHTOWER_NOTIFICATION_URL:-}
+    networks:
+      - proxy
+
+volumes:
+  traefik-certs:
+    driver: local
+  uptime-kuma-data:
+    driver: local
+
+networks:
+  proxy:
+    name: proxy
+    driver: bridge
+    external: false
