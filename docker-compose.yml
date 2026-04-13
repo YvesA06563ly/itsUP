@@ -61,6 +61,9 @@ services:
       - WATCHTOWER_NOTIFICATION_URL=${WATCHTOWER_NOTIFICATION_URL:-}
       # Only watch containers managed by this stack to avoid accidentally updating unrelated containers
       - WATCHTOWER_LABEL_ENABLE=true
+      # Wait 30s after an update before considering the container healthy, gives services time to fully start
+      - WATCHTOWER_HEALTH_CHECK=true
+      - WATCHTOWER_ROLLING_RESTART=true
     networks:
       - proxy
 
