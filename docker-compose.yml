@@ -69,6 +69,8 @@ services:
       # Keep the last 3 images around so I can roll back quickly if something breaks
       - WATCHTOWER_REVIVE_STOPPED=false
       - WATCHTOWER_REMOVE_VOLUMES=false
+      # Increase poll interval timeout to 30s to handle slower registries on my home connection
+      - WATCHTOWER_TIMEOUT=30s
     networks:
       - proxy
 
