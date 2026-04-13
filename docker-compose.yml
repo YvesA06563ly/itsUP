@@ -66,6 +66,9 @@ services:
       - WATCHTOWER_ROLLING_RESTART=true
       # Stop watchtower from sending a notification on every startup, only notify on actual updates
       - WATCHTOWER_NOTIFICATION_REPORT=true
+      # Keep the last 3 images around so I can roll back quickly if something breaks
+      - WATCHTOWER_REVIVE_STOPPED=false
+      - WATCHTOWER_REMOVE_VOLUMES=false
     networks:
       - proxy
 
