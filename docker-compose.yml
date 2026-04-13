@@ -59,6 +59,8 @@ services:
       - WATCHTOWER_SCHEDULE=${WATCHTOWER_SCHEDULE:-0 0 2 * * *}
       - WATCHTOWER_NOTIFICATIONS=${WATCHTOWER_NOTIFICATIONS:-}
       - WATCHTOWER_NOTIFICATION_URL=${WATCHTOWER_NOTIFICATION_URL:-}
+      # Only watch containers managed by this stack to avoid accidentally updating unrelated containers
+      - WATCHTOWER_LABEL_ENABLE=true
     networks:
       - proxy
 
