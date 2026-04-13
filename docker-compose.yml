@@ -73,10 +73,8 @@ services:
       - WATCHTOWER_TIMEOUT=30s
       # Limit watchtower to only check for updates once per day at the scheduled time (disable HTTP API polling)
       - WATCHTOWER_HTTP_API_UPDATE=false
-      # Send a startup message so I know watchtower restarted (e.g. after a host reboot)
-      - WATCHTOWER_NOTIFICATION_SKIP_TITLE=false
-    networks:
-      - proxy
+      # Send a startup message so I know watchtower is running after a reboot
+      - WATCHTOWER_NOTIFICATION_TITLE_TAG=${WATCHTOWER_NOTIFICATION_TITLE_TAG:-itsUP}
 
 volumes:
   traefik-certs:
@@ -84,4 +82,4 @@ volumes:
 
 networks:
   proxy:
-    external: true
+    external: false
