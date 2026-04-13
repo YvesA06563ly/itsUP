@@ -73,17 +73,15 @@ services:
       - WATCHTOWER_TIMEOUT=30s
       # Limit watchtower to only check for updates once per day at the scheduled time (disable HTTP API polling)
       - WATCHTOWER_HTTP_API_UPDATE=false
+      # Send a startup message so I know watchtower restarted (e.g. after a host reboot)
+      - WATCHTOWER_NOTIFICATION_SKIP_TITLE=false
     networks:
       - proxy
 
 volumes:
   traefik-certs:
-    driver: local
   uptime-kuma-data:
-    driver: local
 
 networks:
   proxy:
-    name: proxy
-    driver: bridge
-    external: false
+    external: true
