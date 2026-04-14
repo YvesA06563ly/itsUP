@@ -36,7 +36,7 @@ restart:
 
 ## logs: Follow logs for all services (use SERVICE=<name> to filter)
 logs:
-	$(DOCKER_COMPOSE) logs -f --tail=100 $(SERVICE)
+	$(DOCKER_COMPOSE) logs -f --tail=200 $(SERVICE)
 
 ## build: Build or rebuild services
 build:
