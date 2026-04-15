@@ -38,10 +38,12 @@ Copy `.env.sample` to `.env` and adjust the values:
 | Variable | Description | Default |
 |---|---|---|
 | `DOMAIN` | Base domain for all services | `localhost` |
-| `MONITOR_INTERVAL` | Health check interval (seconds) | `30` |
+| `MONITOR_INTERVAL` | Health check interval (seconds) | `60` |
 | `PROXY_PORT` | Traefik HTTP port | `80` |
 | `PROXY_PORT_HTTPS` | Traefik HTTPS port | `443` |
 | `ACME_EMAIL` | Email for Let's Encrypt certificates | — |
+
+> **Personal note:** I bumped `MONITOR_INTERVAL` default to `60` seconds — 30s was generating too much noise in logs for my homelab setup.
 
 See `.env.sample` for the full list of available options.
 
