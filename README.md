@@ -42,8 +42,11 @@ Copy `.env.sample` to `.env` and adjust the values:
 | `PROXY_PORT` | Traefik HTTP port | `80` |
 | `PROXY_PORT_HTTPS` | Traefik HTTPS port | `443` |
 | `ACME_EMAIL` | Email for Let's Encrypt certificates | — |
+| `MONITOR_TIMEOUT` | Health check request timeout (seconds) | `10` |
 
 > **Personal note:** I bumped `MONITOR_INTERVAL` default to `60` seconds — 30s was generating too much noise in logs for my homelab setup.
+
+> **Personal note:** Added `MONITOR_TIMEOUT` to the table above — it's in `.env.sample` but was missing from the docs, which tripped me up when a slow service kept getting false negatives.
 
 See `.env.sample` for the full list of available options.
 
