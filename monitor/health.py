@@ -45,7 +45,7 @@ class ServiceConfig:
     interval: int = 60  # increased from 30s - no need to hammer endpoints so frequently
     timeout: int = 10   # seconds before timeout
     expected_status: int = 200
-    retries: int = 2
+    retries: int = 3    # bumped from 2 - one extra retry before marking down
 
 
 class HealthChecker:
@@ -89,3 +89,10 @@ class HealthChecker:
                     error="timeout",
                 )
             except aiohttp.ClientError as exc:
+                if attempt < config.retries:
+                    logger.debug("[%s] client error, retrying (%d/%d): %s", config.name, attempt + 1, config.retries, exc)
+                    continue
+                return CheckResult(
+                    status=HealthStatus.DOWN,
+                    error=str(exc),
+                )
