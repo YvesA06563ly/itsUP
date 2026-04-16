@@ -75,11 +75,3 @@ services:
       - WATCHTOWER_HTTP_API_UPDATE=false
       # Send a startup message so I know watchtower is running after a reboot
       - WATCHTOWER_NOTIFICATION_SKIP_TITLE=false
-
-networks:
-  proxy:
-    external: true
-
-volumes:
-  traefik-certs:
-  uptime-kuma-data:
